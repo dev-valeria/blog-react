@@ -38,17 +38,18 @@ nav button:hover {
 form {
   max-width: 40%;
   margin: 0 auto;
+  text-align: center;
 
 }
 
 label {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1px;
+  margin-bottom: 1em;
 }
 
 label span {
-  margin-bottom: .3em;
+  margin-bottom: 0.3em;
   font-weight: bold;
   text-align: left;
 
@@ -92,6 +93,7 @@ textarea {
 .btn:hover {
   background-color: #0F730c;
   color: #FFF;
+  text-align: center;
 }
 
 .btn.btn.btn-outline:hover {
