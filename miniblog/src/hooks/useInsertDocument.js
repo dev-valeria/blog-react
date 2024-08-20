@@ -21,7 +21,7 @@ const insertReducer = (state, action) => {
 
 }
 
-export const useAuthentication = (docCollection) => {
+export const useInsertDocument = (docCollection) => {
 
   const [response, dispatch] = useReducer(insertReducer, initialState)
 

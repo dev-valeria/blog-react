@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import style from './CreatePost.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useAuthValue } from '../../context/AuthContext';
+import { useInsertDocument } from '../../hooks/useInsertDocument'
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -9,10 +10,32 @@ const CreatePost = () => {
   const [body, setBody] = useState("");
   const [tags, setTags] = useState("");
   const [formError, setFormError] = useState("");
+  const {user} = useAuthValue()
+
+  const { insertDocument, response } = useInsertDocument("posts")
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Implementar lógica de envio do formulário aqui
+    setFormError("")
+
+    //validate image URL
+
+    //criar o array de tags 
+
+    //checar todos os valores
+    
+    insertDocument({
+      title,
+      image,
+      body,
+      tags,
+      uid: user.uid,
+      createBy: user.displayName
+    });
+    //redirect to home page
+    
+
+
   }
 
   return (
@@ -70,15 +93,11 @@ const CreatePost = () => {
             className={style.input}
           />
         </label>
-
-        <button type='submit' className='btn'>Cadastrar</button>
-
         {/* Exemplo de como lidar com loading e erro */}
-        {/* 
-        {!loading && <button className='btn'>Cadastrar</button>}
-        {loading && <button className='btn' disabled>Aguarde...</button>}
-        {formError && <p className='error'>{formError}</p>}
-        */}
+        {!response.loading && <button className='btn'>Cadastrar</button>}
+        {response.loading && (<button className='btn' disabled>Aguarde...</button>)}
+        {response.error && <p className='error'>{response.error}</p>}
+        
       </form>
     </div>
   )
