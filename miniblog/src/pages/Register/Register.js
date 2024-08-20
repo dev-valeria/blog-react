@@ -38,9 +38,9 @@ const Register = () => {
     }
   }, [authError])
   return (
-    <div>
-      <h1 className={styles.register}>Cadastre-se para postar</h1>
-      <p className={styles.registerparagrafo}>Crie seu usuario e compartilhe suas historias</p>
+    <div className={styles.register}>
+      <h1>Cadastre-se para postar</h1>
+      <p>Crie seu usuario e compartilhe suas historias</p>
       <form onSubmit={handleSubmit}>
         <label>
           <span>Nome: </span>
