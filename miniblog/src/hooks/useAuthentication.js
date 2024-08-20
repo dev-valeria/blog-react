@@ -1,4 +1,4 @@
-import { db } from "../firebase/config";
+import { db, auth } from "../firebase/config";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -12,7 +12,6 @@ export const useAuthentication = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false); // Corrigido para false por padrão
   const [cancelled, setCancelled] = useState(false);
-  const auth = getAuth();
 
   function checkIfIsCancelled() {
     if (cancelled) {
@@ -69,7 +68,7 @@ export const useAuthentication = () => {
 
       if (error.code === "auth/user-not-found" || "auth/invalid-credential") {
         systemErrorMessage = "Usuário não encontrado.";
-      } else if (error.code === "auth/wrong-password") {
+      } else if (error.code === "auth/too-many-requests") {
         systemErrorMessage = "Senha incorreta.";
       } else if (error.code === "auth/invalid-email") {
         systemErrorMessage = "E-mail inválido.";
