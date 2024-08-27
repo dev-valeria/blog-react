@@ -62,8 +62,6 @@ export const useAuthentication = () => {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       setLoading(false);
     } catch (error) {
-    console.log("Error code:", error.code); 
-    console.log("Error message:", error.message);
       let systemErrorMessage;
 
       if (error.code === "auth/user-not-found" || "auth/invalid-credential") {

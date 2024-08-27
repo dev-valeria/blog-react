@@ -1,65 +1,69 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/config";
-import {
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  where,
-} from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot, where } from "firebase/firestore";
 
-export const useFetchDocuments = (docCollection, search = null, uid = null) => {
-  const [documents, setDocuments] = useState(null);
+export const useFetchDocuments = (docCollection, search = null) => {
+  const [documents, setDocuments] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(null);
-
-  // deal with memory leak
-  const [cancelled, setCancelled] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadData() {
-      if (cancelled) return;
+    const loadData = async () => {
       setLoading(true);
 
       const collectionRef = collection(db, docCollection);
 
       try {
         let q;
-      
+
         if (search) {
-          q = await query(collectionRef, where("tags", "array-contains", search), orderBy("createAt", "desc"));
-          
+          if (search.trim() === "") {
+            setDocuments([]);
+            setLoading(false);
+            return;
+          }
+
+          q = query(
+            collectionRef,
+            where("tagsArray", "array-contains", search.trim()), 
+            orderBy("createdAt", "desc")
+           );
         } else {
-        // query without filters
-        q = query(collectionRef, orderBy("createdAt", "desc"));
-
+          q = query(collectionRef, orderBy("createdAt", "desc"));
         }
-       
 
-        onSnapshot(q, (querySnapshot) => {
-          setDocuments(
-            querySnapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }))
-          );
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          if (!querySnapshot.empty) {
+            setDocuments(
+              querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }))
+            );
+          } else {
+            setDocuments([]);
+          }
+          setLoading(false);
         });
 
-        setLoading(false);
+        return () => unsubscribe(); // Limpeza do listener
+
       } catch (error) {
         console.log(error);
         setError(error.message);
         setLoading(false);
       }
-    }
+    };
+
     loadData();
-  }, [docCollection, search, uid, cancelled]);
+  }, [docCollection, search]);
 
-  useEffect(() => {
-    return () => setCancelled(true);
-  }, []);
-
-  // Return an array or object
   return { documents, loading, error };
 };
+
+
+
+
+
+
 
