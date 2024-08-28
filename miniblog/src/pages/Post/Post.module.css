@@ -1,0 +1,29 @@
+/* Post.module.css */
+
+.postContainer {
+  padding: 2em;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.postImage {
+  max-width: 100%;
+  height: auto;
+  margin: 1em 0;
+}
+
+.tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 1em 0;
+}
+
+.tag {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  font-weight: bold;
+}
